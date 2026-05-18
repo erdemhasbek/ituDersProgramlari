@@ -397,7 +397,7 @@
 <header>
   <a class="logo" href="#">
     <span class="logo-badge">İTÜ</span>
-    <span class="logo-text">Ders Programlari</span>
+    <span class="logo-text">ders-programlari</span>
   </a>
   <div class="header-meta">
     <div>Açık kaynak arşiv</div>
@@ -658,11 +658,6 @@ document.getElementById('btn-csv').addEventListener('click', () => {
 });
 
 // ─── EVENT LISTENERS ───────────────────────────────────────────────────────────
-let searchTimer;
-document.getElementById('search').addEventListener('input', () => {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(applyFilters, 200);
-});
 ['brans-filter','seviye-filter'].forEach(id =>
   document.getElementById(id).addEventListener('change', applyFilters)
 );
