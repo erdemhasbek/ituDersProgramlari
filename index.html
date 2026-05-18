@@ -431,31 +431,7 @@
         </select>
       </div>
     </div>
-    <!-- Alt satır: Gün, Bina, Öğretim Üyesi, Ders Ara -->
-    <div class="filter-row filter-row-bottom">
-      <div class="filter-group">
-        <span class="filter-label">Gün</span>
-        <select id="gun-filter">
-          <option value="">Tüm Günler</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <span class="filter-label">Bina</span>
-        <select id="bina-filter">
-          <option value="">Tüm Binalar</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <span class="filter-label">Öğretim Üyesi</span>
-        <select id="hoca-filter">
-          <option value="">Tüm Hocalar</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <span class="filter-label">Ders Ara</span>
-        <input type="text" id="search" placeholder="Ders adı veya kodu..." />
-      </div>
-    </div>
+
     <!-- Aksiyonlar -->
     <div class="filter-actions">
       <button class="btn-clear" id="btn-clear">✕ Filtreleri Temizle</button>
@@ -560,30 +536,6 @@ function buildDynamicFilters() {
     '<option value="">Brans Seçiniz</option>' +
     branslar.map(b => `<option value="${b}">${b}</option>`).join('');
 
-  // Gün — sadece tekil günler (çoklu olan "Salı Çarşamba" gibi değerleri de dahil et)
-  const gunler = [...new Set(
-    allData.flatMap(d => (d['Gün'] || '').split(' ').filter(g => g && g !== '-'))
-  )].sort((a, b) => {
-    const order = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-    return order.indexOf(a) - order.indexOf(b);
-  });
-  document.getElementById('gun-filter').innerHTML =
-    '<option value="">Tüm Günler</option>' +
-    gunler.map(g => `<option value="${g}">${g}</option>`).join('');
-
-  // Bina — sadece tekil binalar
-  const binalar = [...new Set(
-    allData.flatMap(d => (d['Bina'] || '').split(' ').filter(b => b && b !== '-'))
-  )].sort();
-  document.getElementById('bina-filter').innerHTML =
-    '<option value="">Tüm Binalar</option>' +
-    binalar.map(b => `<option value="${b}">${b}</option>`).join('');
-
-  // Hoca
-  const hocalar = unique('Öğretim Üyesi');
-  document.getElementById('hoca-filter').innerHTML =
-    '<option value="">Tüm Hocalar</option>' +
-    hocalar.map(h => `<option value="${h}">${h}</option>`).join('');
 }
 
 // ─── FİLTRELEME ────────────────────────────────────────────────────────────────
@@ -596,21 +548,11 @@ function applyFilters() {
   if (!donem || !seviye || !brans) {
     document.getElementById('table-body').innerHTML =
       '<tr><td colspan="9" class="empty-state">Lütfen dönem, eğitim seviyesi ve brans seçiniz.</td></tr>';
-    document.getElementById('stat-filtre').textContent = '—';
     return;
   }
 
   filtered = allData.filter(r => {
-    const q    = document.getElementById('search').value.toLowerCase().trim();
-    const gun  = document.getElementById('gun-filter').value;
-    const bina = document.getElementById('bina-filter').value;
-    const hoca = document.getElementById('hoca-filter').value;
     if (brans && r.bransKodu !== brans) return false;
-    if (gun   && !(r['Gün']  || '').includes(gun))  return false;
-    if (bina  && !(r['Bina'] || '').includes(bina)) return false;
-    if (hoca  && r['Öğretim Üyesi'] !== hoca) return false;
-    if (q && ![r['Ders Kodu'], r['Ders Adı'], String(r.CRN)]
-      .some(v => v && String(v).toLowerCase().includes(q))) return false;
     return true;
   });
 
@@ -628,18 +570,13 @@ function applyFilters() {
 }
 
 function clearFilters() {
-  document.getElementById('search').value = '';
   document.getElementById('donem-select').value = '';
   document.getElementById('seviye-filter').value = '';
   document.getElementById('brans-filter').innerHTML = '<option value="">Brans Seçiniz</option>';
-  document.getElementById('gun-filter').innerHTML = '<option value="">Tüm Günler</option>';
-  document.getElementById('bina-filter').innerHTML = '<option value="">Tüm Binalar</option>';
-  document.getElementById('hoca-filter').innerHTML = '<option value="">Tüm Hocalar</option>';
   allData = [];
   filtered = [];
   document.getElementById('table-body').innerHTML =
     '<tr><td colspan="9" class="empty-state">Lütfen dönem, eğitim seviyesi ve brans seçiniz.</td></tr>';
-  updateStats();
 }
 
 // ─── TABLO ─────────────────────────────────────────────────────────────────────
@@ -729,7 +666,7 @@ document.getElementById('search').addEventListener('input', () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(applyFilters, 200);
 });
-['brans-filter','gun-filter','bina-filter','hoca-filter','seviye-filter'].forEach(id =>
+['brans-filter','seviye-filter'].forEach(id =>
   document.getElementById(id).addEventListener('change', applyFilters)
 );
 document.getElementById('btn-clear').addEventListener('click', clearFilters);
