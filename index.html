@@ -508,8 +508,6 @@ function buildDonemSelect() {
 async function loadDonem(i) {
   currentDonem = i;
   document.getElementById('donem-select').value = i;
-  document.getElementById('table-body').innerHTML =
-    '<tr><td colspan="9" class="loading">Veri yükleniyor</td></tr>';
 
   try {
     const res = await fetch(DONEMLER[i].path);
@@ -517,7 +515,6 @@ async function loadDonem(i) {
     document.getElementById('last-update').textContent = DONEMLER[i].label;
     buildDynamicFilters();
     applyFilters();
-    updateStats();
   } catch (e) {
     document.getElementById('table-body').innerHTML =
       '<tr><td colspan="9" class="empty-state">Veri yüklenemedi.</td></tr>';
