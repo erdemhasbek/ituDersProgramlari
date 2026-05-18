@@ -27,6 +27,16 @@
       color: var(--text);
       font-family: var(--sans);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
     }
 
     /* HEADER */
@@ -75,7 +85,6 @@
     }
 
 
-    /* ANA LAYOUT */
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -161,42 +170,6 @@
       color: var(--accent);
     }
 
-    /* STATS BAR */
-    .stats-bar {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .stat {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-
-    .stat-num {
-      font-family: var(--mono);
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .stat-label {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .stat-divider {
-      width: 1px;
-      height: 24px;
-      background: var(--border);
-    }
 
     /* TABLO */
     .table-wrap {
@@ -490,24 +463,6 @@
     </div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat">
-      <span class="stat-num" id="stat-toplam">—</span>
-      <span class="stat-label">Ders</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num" id="stat-brans">—</span>
-      <span class="stat-label">Brans</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num" id="stat-filtre">—</span>
-      <span class="stat-label">Filtrelenmiş</span>
-    </div>
-  </div>
-
   <!-- TABLO -->
   <div class="table-wrap">
     <table id="main-table">
@@ -521,7 +476,7 @@
           <th data-col="Saat">Saat</th>
           <th data-col="Derslik">Derslik</th>
           <th data-col="Kontenjan">Kontenjan</th>
-          <th data-col="bransKodu">Brans</th>
+          <th data-col="Dersi Alabilen Programlar">Dersi Alabilecek Bölümler</th>
         </tr>
       </thead>
       <tbody id="table-body">
@@ -530,14 +485,7 @@
     </table>
   </div>
 
-  <!-- PAGINATION -->
-  <div class="pagination">
-    <span id="page-info">— / —</span>
-    <div class="page-btns">
-      <button class="page-btn" id="btn-prev" disabled>← Önceki</button>
-      <button class="page-btn" id="btn-next" disabled>Sonraki →</button>
-    </div>
-  </div>
+
 
 </div>
 
@@ -561,7 +509,7 @@ let currentDonem = 0;
 let sortCol = null;
 let sortDir = 1;
 let page = 0;
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 99999;
 
 // ─── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
@@ -726,7 +674,7 @@ function renderTable() {
           <span class="fill-text text-${cls}">${yaz}/${kont}</span>
         </div>
       </td>
-      <td><span class="brans-chip">${r.bransKodu || '-'}</span></td>
+      <td style="font-size:12px;color:var(--text-dim)">${r['Dersi Alabilen Programlar'] || '-'}</td>
     </tr>`;
   }).join('');
 
@@ -743,10 +691,7 @@ function updatePagination() {
 }
 
 function updateStats() {
-  document.getElementById('stat-toplam').textContent = allData.length.toLocaleString('tr');
-  document.getElementById('stat-brans').textContent =
-    new Set(allData.map(d => d.bransKodu)).size;
-  document.getElementById('stat-filtre').textContent = filtered.length.toLocaleString('tr');
+  // stats bar kaldırıldı, fonksiyon boş bırakıldı
 }
 
 // ─── SORT ──────────────────────────────────────────────────────────────────────
@@ -788,8 +733,7 @@ document.getElementById('search').addEventListener('input', () => {
   document.getElementById(id).addEventListener('change', applyFilters)
 );
 document.getElementById('btn-clear').addEventListener('click', clearFilters);
-document.getElementById('btn-prev').addEventListener('click', () => { page--; renderTable(); });
-document.getElementById('btn-next').addEventListener('click', () => { page++; renderTable(); });
+
 
 init();
 </script>
