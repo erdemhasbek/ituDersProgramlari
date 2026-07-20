@@ -2,7 +2,7 @@
 
 A searchable, filterable archive of Istanbul Technical University undergraduate course schedules. Data is fetched from ITU OBS.
 
-**🌐 Live site:** `https://erdemhasbek.github.io/ituDersProgramlari`
+**🌐 Live site:** [erdemhasbek.github.io/ituDersProgramlari](https://erdemhasbek.github.io/ituDersProgramlari)
 
 ---
 
@@ -64,7 +64,7 @@ ituDersProgramlari/
 
 1. Push all files to the `main` branch
 2. Go to **Settings → Pages → Branch: main**
-3. Site will be live at `https://erdemhasbek.github.io/ituDersProgramlari`
+3. Site will be live at [erdemhasbek.github.io/ituDersProgramlari](https://erdemhasbek.github.io/ituDersProgramlari)
 
 ---
 
